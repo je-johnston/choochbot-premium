@@ -1,0 +1,21 @@
+{
+  // Use IntelliSense to learn about possible attributes.
+  // Hover to view descriptions of existing attributes.
+  // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "pwa-node",
+      "request": "launch",
+      "name": "Launch Program",
+      "skipFiles": [
+        "<node_internals>/**"
+      ],
+      "env": {
+        "WALLET":"0xd3795844d1b88ad89d75cdbd84b68ccd17df8375",
+        "DISCORD_ENDPOINT": "https://discord.com/api/webhooks/837207494387695644/rgmnXS861NB-KGF3dxtyizdBf1WwDfY3X8LKnbZF-EygrAXe87bE0ef3UlU6YBG90iZF"
+      },
+      "program": "${file}"
+    }
+  ]
+}
