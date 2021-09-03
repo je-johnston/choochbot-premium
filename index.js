@@ -1,5 +1,4 @@
 const axios = require('axios');
-const cheerio = require('cheerio');
 const Papa = require('papaparse');
 const fs = require('fs');
 
@@ -24,19 +23,11 @@ async function main() {
   //Build out the current data set.
   await buildCurrentDataset();
 
-  //Load historical data from local file storage.
-  await loadHistoricalData();
-
-  //Build computed properties.
-  await buildComputedProps();
-
   //Write current data to local file storage.
   await writeCurrentData();
 
   //Output data to discord.
   await outputToDiscord();
-
-
 }
 
 /**
@@ -60,21 +51,29 @@ async function buildEthermine() {
   //Values from the ethermine API need to be rounded off.
   //@todo -> Sloppy.
   hashrate = (currentStats.currentHashrate / 1000000).toFixed(2);
-  currentProgressPct = (currentStats.unpaid / 1000000000000000).toFixed(2);
-  currentProgressEth = (currentStats.unpaid / 1000000000000000000).toFixed(5);
+  currentProgressPct = (currentStats.unpaid / 2000000000000000).toFixed(2);
+  currentProgressEth = (currentStats.unpaid / 2000000000000000000).toFixed(5);
 }
 
 /**
  * Hits the gas endpoint to get the current gas values.
  */
 async function buildGasData() {
+  try {
   let endpoint = `https://www.gasnow.org/api/v3/gas/price?utm_source=:xx`;
   let res = await axios.get(endpoint);
   //Round off the values.
-  rapidGas = (res.data.data.rapid / 1000000000).toPrecision(2);
-  fastGas = (res.data.data.fast / 1000000000).toPrecision(2);
-  stdGas = (res.data.data.standard / 1000000000).toPrecision(2);
-  slowGas = (res.data.data.slow / 1000000000).toPrecision(2);
+  rapidGas = (res.data.data.rapid / 1000000000).toPrecision(3);
+  fastGas = (res.data.data.fast / 1000000000).toPrecision(3);
+  stdGas = (res.data.data.standard / 1000000000).toPrecision(3);
+  slowGas = (res.data.data.slow / 1000000000).toPrecision(3);
+  } catch(e) {
+    rapidGas = 'error';
+    fastGas = 'error';
+    stdGas = 'error';
+    slowGas = 'error';
+  }
+
 }
 
 /**
@@ -157,7 +156,7 @@ async function outputToDiscord() {
             "value": `${hashrate} MH/s`,
             "inline": true
           },
-          {
+          { 
             "name": "Wallet Balance (ETH / USD)",
             "value": `${walletBalanceEth} / $${walletBalanceUSD}`,
             "inline": true
@@ -208,9 +207,8 @@ async function buildComputedProps() {
   }
 }
 
-main().then(res => {
-  console.log(`Finished with: ${res}`);;
-}).catch(e => {
-  console.log(`Found error: ${JSON.stringify(e.message)}`);
-  //@todo -> Notification
-})
+// main().then(res => {
+//   console.log(`Finished with: ${res}`);;
+// }).catch(e => {
+//   console.log(`Found error: ${JSON.stringify(e.message)}`);
+// })
