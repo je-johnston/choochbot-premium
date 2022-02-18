@@ -137,14 +137,6 @@ async function outputToDiscord() {
     ]
   };
 
-  if (progressSinceLastExecution > 0) {
-    data.embeds[0].fields.push({
-      "name": "Progress since last execution",
-      "value": `${progressSinceLastExecution}% (${progressDelta})`,
-      "inline": true
-    })
-  }
-
   await axios.post(ENDPOINT, data);
 }
 
