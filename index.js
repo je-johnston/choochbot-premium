@@ -2,8 +2,6 @@ const axios = require('axios');
 
 let currentProgressPct, activeWorkers, hashrate, walletBalanceEth, 
 currentSharePrice, walletBalanceUSD, ethUSDPrice, slowGas, stdGas, fastGas, rapidGas;
-let progressSinceLastExecution = 0;
-let progressDelta = 0;
 
 const WALLET = process.env.WALLET || '';
 const ENDPOINT = process.env.ENDPOINT || '';
